@@ -29,6 +29,17 @@ gf64::gf64(const uint64_t value) : value_(value)
 {
 }
 
+// gf64::gf64(const int value) : value_(value)
+// {
+// }
+
+
+gf64::gf64(const bigint<num_limbs> b)
+{
+    value_ = b.data[0];
+}
+
+
 std::vector<uint64_t> gf64::to_words() const
 {
     return std::vector<uint64_t>({this->value_});
@@ -142,6 +153,13 @@ gf64 gf64::operator-(const gf64 &other) const
 {
     gf64 result(*this);
     return (result-=(other));
+}
+
+gf64 gf64::operator-(const int other) const
+{
+    gf64 result(*this);
+    gf64 o(other);
+    return (result-=(o));
 }
 
 gf64 gf64::operator-() const
@@ -261,6 +279,13 @@ bool gf64::operator==(const gf64 &other) const
 bool gf64::operator!=(const gf64 &other) const
 {
     return !(this->operator==(other));
+}
+
+bigint<gf64::num_limbs> gf64::as_bigint() const
+{
+    bigint<num_limbs> b;
+    b.data[0] = value_;
+    return b;
 }
 
 void gf64::print() const

@@ -31,9 +31,13 @@ public:
     // than x^64 is greater than x^31, to enable faster multiplication.
     static const constexpr uint64_t modulus_ = 0b11011;
     static const constexpr uint64_t num_bits = 64;
+    static const constexpr std::size_t num_limbs = 1;
+
 
     explicit gf64();
-    explicit gf64(const uint64_t value);
+    gf64(const uint64_t value);
+    // explicit gf64(const int value);
+    explicit gf64(const bigint<num_limbs> b);
 
     gf64& operator+=(const gf64 &other);
     gf64& operator-=(const gf64 &other);
@@ -47,6 +51,7 @@ public:
 
     gf64 operator+(const gf64 &other) const;
     gf64 operator-(const gf64 &other) const;
+    gf64 operator-(const int other) const;
     gf64 operator-() const;
     gf64 operator*(const gf64 &other) const;
     gf64 operator^(const unsigned long pow) const;
@@ -64,6 +69,8 @@ public:
     bool operator!=(const gf64 &other) const;
 
     bool is_zero() const;
+
+    bigint<num_limbs> as_bigint() const;
 
     void print() const;
     /**
