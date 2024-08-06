@@ -30,9 +30,12 @@ public:
     // x^32 + x^22 + x^2 + x^1 + 1
     static const constexpr uint64_t modulus_ = 0b10000000000000000000111;
     static const constexpr uint64_t num_bits = 32;
+    static const constexpr std::size_t num_limbs = 1;
 
     explicit gf32();
-    explicit gf32(const uint32_t value);
+    gf32(const uint32_t value);
+    explicit gf32(const bigint<num_limbs> &b);
+
 
     gf32& operator+=(const gf32 &other);
     gf32& operator-=(const gf32 &other);
@@ -46,6 +49,7 @@ public:
 
     gf32 operator+(const gf32 &other) const;
     gf32 operator-(const gf32 &other) const;
+    gf32 operator-(const int other) const;
     gf32 operator-() const;
     gf32 operator*(const gf32 &other) const;
     gf32 operator^(const unsigned long pow) const;
@@ -63,6 +67,8 @@ public:
     bool operator!=(const gf32 &other) const;
 
     bool is_zero() const;
+
+    bigint<num_limbs> as_bigint() const;
 
     void print() const;
     /**

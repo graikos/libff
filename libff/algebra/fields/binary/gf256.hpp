@@ -31,13 +31,16 @@ public:
     // x^256 + x^10 + x^5 + x^2 + 1
     static const constexpr uint64_t modulus_ = 0b10000100101;
     static const constexpr uint64_t num_bits = 256;
+    static const constexpr std::size_t num_limbs = 4;
 
     explicit gf256();
     /* we need a constructor that only initializes the low 64 bits of value_ to
        be able to do gf256(0) and gf256(1). */
-    explicit gf256(const uint64_t value_low);
+    gf256(const uint64_t value_low);
     explicit gf256(const uint64_t value_high, const uint64_t value_midh,
                    const uint64_t value_midl, const uint64_t value_low);
+
+    explicit gf256(const bigint<num_limbs> &b);
 
     gf256& operator+=(const gf256 &other);
     gf256& operator-=(const gf256 &other);
@@ -52,6 +55,7 @@ public:
     gf256 operator+(const gf256 &other) const;
     gf256 operator-(const gf256 &other) const;
     gf256 operator-() const;
+    gf256 operator-(const int other) const;
     gf256 operator*(const gf256 &other) const;
     gf256 operator^(const unsigned long pow) const;
     template<mp_size_t m>
@@ -68,6 +72,8 @@ public:
     bool operator!=(const gf256 &other) const;
 
     bool is_zero() const;
+
+    bigint<num_limbs> as_bigint() const;
 
     void print() const;
     /**

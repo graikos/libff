@@ -29,6 +29,10 @@ gf32::gf32(const uint32_t value) : value_(value)
 {
 }
 
+gf32::gf32(const bigint<num_limbs> &b) : value_(b.data[0])
+{
+}
+
 std::vector<uint64_t> gf32::to_words() const
 {
     return std::vector<uint64_t>({uint64_t(this->value_)});
@@ -127,6 +131,13 @@ gf32 gf32::operator-(const gf32 &other) const
     return (result-=(other));
 }
 
+gf32 gf32::operator-(const int other) const
+{
+    gf32 result(*this);
+    gf32 o(other);
+    return (result-=(o));
+}
+
 gf32 gf32::operator-() const
 {
     /* additive inverse matches the element itself */
@@ -220,6 +231,13 @@ bool gf32::operator==(const gf32 &other) const
 bool gf32::operator!=(const gf32 &other) const
 {
     return !(this->operator==(other));
+}
+
+bigint<gf32::num_limbs> gf32::as_bigint() const
+{
+    bigint<num_limbs> b;
+    b.data[0] = value_;
+    return b;
 }
 
 void gf32::print() const

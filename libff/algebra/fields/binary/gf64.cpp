@@ -34,7 +34,7 @@ gf64::gf64(const uint64_t value) : value_(value)
 // }
 
 
-gf64::gf64(const bigint<num_limbs> b)
+gf64::gf64(const bigint<num_limbs> &b)
 {
     value_ = b.data[0];
 }

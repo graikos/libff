@@ -34,6 +34,11 @@ gf128::gf128(const uint64_t value_high, const uint64_t value_low) :
 {
 }
 
+gf128::gf128(const bigint<num_limbs> &b) :
+    value_{b.data[0], b.data[1]}
+{
+}
+
 std::vector<uint64_t> gf128::to_words() const
 {
     return std::vector<uint64_t>({this->value_[0], this->value_[1]});
@@ -175,6 +180,13 @@ gf128 gf128::operator-(const gf128 &other) const
     return (result-=(other));
 }
 
+gf128 gf128::operator-(const int other) const
+{
+    gf128 result(*this);
+    gf128 o(other);
+    return (result-=(o));
+}
+
 gf128 gf128::operator-() const
 {
     return gf128(this->value_[1], this->value_[0]);
@@ -265,6 +277,14 @@ bool gf128::operator!=(const gf128 &other) const
 bool gf128::is_zero() const
 {
     return (this->value_[0] == 0) && (this->value_[1] == 0);
+}
+
+bigint<gf128::num_limbs> gf128::as_bigint() const
+{
+    bigint<num_limbs> b;
+    b.data[0] = this->value_[0];
+    b.data[1] = this->value_[1];
+    return b;
 }
 
 void gf128::print() const

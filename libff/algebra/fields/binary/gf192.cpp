@@ -34,6 +34,11 @@ gf192::gf192(const uint64_t value_high, const uint64_t value_mid, const uint64_t
 {
 }
 
+gf192::gf192(const bigint<num_limbs> &b) :
+    value_{b.data[0], b.data[1], b.data[2]}
+{
+}
+
 std::vector<uint64_t> gf192::to_words() const
 {
     return std::vector<uint64_t>({this->value_[0], this->value_[1], this->value_[2]});
@@ -217,6 +222,13 @@ gf192 gf192::operator-(const gf192 &other) const
     return (result-=(other));
 }
 
+gf192 gf192::operator-(const int other) const
+{
+    gf192 result(*this);
+    gf192 o(other);
+    return (result-=(o));
+}
+
 gf192 gf192::operator-() const
 {
     return gf192(*this);
@@ -319,6 +331,16 @@ bool gf192::operator!=(const gf192 &other) const
 bool gf192::is_zero() const
 {
     return (this->value_[0] == 0) && (this->value_[1] == 0) && (this->value_[2] == 0);
+}
+
+
+bigint<gf192::num_limbs> gf192::as_bigint() const
+{
+    bigint<num_limbs> b;
+    b.data[0] = this->value_[0];
+    b.data[1] = this->value_[1];
+    b.data[2] = this->value_[2];
+    return b;
 }
 
 void gf192::print() const

@@ -35,6 +35,11 @@ gf256::gf256(const uint64_t value_high, const uint64_t value_midh,
 {
 }
 
+gf256::gf256(const bigint<num_limbs> &b) :
+    value_{b.data[0], b.data[1], b.data[2], b.data[3]}
+{
+}
+
 std::vector<uint64_t> gf256::to_words() const
 {
     return std::vector<uint64_t>({this->value_[0], this->value_[1], this->value_[2], this->value_[3]});
@@ -298,6 +303,13 @@ gf256 gf256::operator-(const gf256 &other) const
     return (result-=(other));
 }
 
+gf256 gf256::operator-(const int other) const
+{
+    gf256 result(*this);
+    gf256 o(other);
+    return (result-=(o));
+}
+
 gf256 gf256::operator-() const
 {
     return gf256(*this);
@@ -394,6 +406,17 @@ bool gf256::is_zero() const
 {
     return (this->value_[0] == 0) && (this->value_[1] == 0) &&
            (this->value_[2] == 0) && (this->value_[3] == 0);
+}
+
+
+bigint<gf256::num_limbs> gf256::as_bigint() const
+{
+    bigint<num_limbs> b;
+    b.data[0] = this->value_[0];
+    b.data[1] = this->value_[1];
+    b.data[2] = this->value_[2];
+    b.data[3] = this->value_[3];
+    return b;
 }
 
 void gf256::print() const

@@ -37,7 +37,7 @@ public:
     explicit gf64();
     gf64(const uint64_t value);
     // explicit gf64(const int value);
-    explicit gf64(const bigint<num_limbs> b);
+    explicit gf64(const bigint<num_limbs> &b);
 
     gf64& operator+=(const gf64 &other);
     gf64& operator-=(const gf64 &other);

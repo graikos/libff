@@ -30,12 +30,14 @@ public:
     // x^192 + x^7 + x^2 + x + 1
     static const constexpr uint64_t modulus_ = 0b10000111;
     static const constexpr uint64_t num_bits = 192;
+    static const constexpr std::size_t num_limbs = 3;
 
     explicit gf192();
     /* we need a constructor that only initializes the low half of value_ to
        be able to do gf192(0) and gf192(1). */
-    explicit gf192(const uint64_t value_low);
+    gf192(const uint64_t value_low);
     explicit gf192(const uint64_t value_high, const uint64_t value_mid, const uint64_t value_low);
+    explicit gf192(const bigint<num_limbs> &b);
 
     gf192& operator+=(const gf192 &other);
     gf192& operator-=(const gf192 &other);
@@ -49,6 +51,7 @@ public:
 
     gf192 operator+(const gf192 &other) const;
     gf192 operator-(const gf192 &other) const;
+    gf192 operator-(const int other) const;
     gf192 operator-() const;
     gf192 operator*(const gf192 &other) const;
     gf192 operator^(const unsigned long pow) const;
@@ -77,6 +80,8 @@ public:
     bool operator!=(const gf192 &other) const;
 
     bool is_zero() const;
+
+    bigint<num_limbs> as_bigint() const;
 
     void print() const;
 

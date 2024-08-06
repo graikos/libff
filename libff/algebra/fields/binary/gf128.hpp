@@ -30,12 +30,14 @@ public:
     // x^128 + x^7 + x^2 + x + 1
     static const constexpr uint64_t modulus_ = 0b10000111;
     static const constexpr uint64_t num_bits = 128;
+    static const constexpr std::size_t num_limbs = 2;
 
     explicit gf128();
     /* we need a constructor that only initializes the low half of value_ to
        be able to do gf128(0) and gf128(1). */
-    explicit gf128(const uint64_t value_low);
+    gf128(const uint64_t value_low);
     explicit gf128(const uint64_t value_high, const uint64_t value_low);
+    explicit gf128(const bigint<num_limbs> &b);
 
     gf128& operator+=(const gf128 &other);
     gf128& operator-=(const gf128 &other);
@@ -49,6 +51,7 @@ public:
 
     gf128 operator+(const gf128 &other) const;
     gf128 operator-(const gf128 &other) const;
+    gf128 operator-(const int other) const;
     gf128 operator-() const;
     gf128 operator*(const gf128 &other) const;
     gf128 operator^(const unsigned long pow) const;
@@ -66,6 +69,8 @@ public:
     bool operator!=(const gf128 &other) const;
 
     bool is_zero() const;
+
+    bigint<num_limbs> as_bigint() const;
 
     void print() const;
     /**
